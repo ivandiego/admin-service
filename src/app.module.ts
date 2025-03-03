@@ -1,0 +1,42 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { Event } from './entities/event.entity';
+import { Ticket } from './entities/ticket.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
+      username: process.env.DB_USERNAME || 'postgres',
+      password: process.env.DB_PASSWORD || 'example',
+      database: process.env.DB_NAME || 'admin_db',
+      entities: [Event, Ticket],
+      synchronize: true, // ⚠️ Apenas para desenvolvimento
+    }),
+
+    TypeOrmModule.forFeature([Event, Ticket]), // Importando os repositórios
+
+    ClientsModule.register([
+      {
+        name: 'SALES_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            brokers: ['kafka:9092'],
+          },
+          consumer: {
+            groupId: 'sales-service',
+          },
+        },
+      },
+    ]),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
