@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { CreateTicketDto } from './dto/create-ticket.dto';
+import { Ticket } from './entities/ticket.entity';
 
 @Controller()
 export class AppController {
@@ -62,4 +63,10 @@ export class AppController {
   async handleDeleteTicket(id: string) {
     return await this.appService.deleteTicket(id);
   }
+
+    // ✅ Listar todas as vendas realizadas (Kafka)
+    @MessagePattern('get_all_sales')
+    async handleGetAllSales(): Promise<Ticket[]> {
+      return this.appService.getAllSales();
+    }
 }

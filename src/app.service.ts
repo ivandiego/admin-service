@@ -106,4 +106,9 @@ export class AppService {
     //   this.salesServiceClient.emit('event_updated', updatedEvent);
     //   return updatedEvent;
     // }
+
+      // ✅ Listagem de todas as vendas realizadas (tickets comprados)
+  async getAllSales(): Promise<Ticket[]> {
+    return this.ticketRepository.find({ relations: ['event'] });
+  }
 }
