@@ -1,23 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-// import { Event } from '../events/event.entity'; // Importa a entidade Event
-// import { Sale } from '../sales/sale.entity'; // Importa a entidade Sale
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Event } from './event.entity';
 
 @Entity()
 export class Ticket {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  name: string;
+  userId: string;
 
-  @Column('decimal')
-  price: number;
+  @ManyToOne(() => Event, (event) => event.tickets)
+  @JoinColumn({ name: 'eventId' }) // 🔥 Definindo a chave estrangeira explicitamente
+  event: Event;
 
-//   @ManyToOne(() => Event, (event) => event.tickets)
-//   event: Event; // Relacionamento com Event
-  
-//   @OneToMany(() => Sale, (sale) => sale.ticket)
-//   sales: Sale[]; // Relacionamento com Sales
+  @Column()
+  eventId: string; // 🔥 Adicionando a chave estrangeira explicitamente
 
   @Column()
   quantity: number;

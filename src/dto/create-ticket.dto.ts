@@ -1,24 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, Min, IsInt } from 'class-validator';
+import { IsString, IsUUID, IsInt, Min, Max } from 'class-validator';
 
 export class CreateTicketDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+  @IsUUID()
+  eventId: string;
 
-  @ApiProperty()
-  @IsNumber()
-  @Min(0)
-  price: number;
+  @IsUUID()
+  userId: string;
 
-  @ApiProperty()
   @IsInt()
   @Min(1)
+  @Max(5) // 🔥 Regra: um usuário pode comprar no máximo 5 bilhetes por evento
   quantity: number;
-
-  @ApiProperty()
-  @IsInt()
-  @Min(1)
-  eventId: number;
 }

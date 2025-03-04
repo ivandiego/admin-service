@@ -1,48 +1,30 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { CreateTicketDto } from './dto/create-ticket.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@ApiTags('Admin')
-@Controller('admin')
+@Controller()
 export class AppController {
-  constructor(private readonly adminService: AppService) {}
+  constructor(private readonly appService: AppService) {}
 
-  @Post('create-event')
-  @ApiOperation({ summary: 'Create a new event' })
-  @ApiResponse({ status: 201, description: 'Event successfully created' })
-  async createEvent(@Body() createEventDto: CreateEventDto) {
-    return this.adminService.createEvent(createEventDto);
+  // // ✅ Buscar eventos disponíveis (Kafka)
+  // @MessagePattern('get_available_events')
+  // async handleGetAvailableEvents() {
+  //   return this.appService.getAvailableEvents();
+  // }
+
+  // ✅ Criar evento (Kafka)
+  @MessagePattern('create_event')
+  async handleCreateEvent(dto: CreateEventDto) {
+    const event = await this.appService.createEvent(dto);
+    return JSON.parse(JSON.stringify(event)); 
   }
 
-  @Get('events')
-  @ApiOperation({ summary: 'List all events' })
-  async getAllEvents() {
-    return this.adminService.getAllEvents();
-  }
-
-  @Get('events/:id')
-  @ApiOperation({ summary: 'Get event details by ID' })
-  async getEvent(@Param('id') id: number) {
-    return this.adminService.getEventById(id);
-  }
-
-  @Post('create-ticket')
-  @ApiOperation({ summary: 'Create a new ticket' })
-  async createTicket(@Body() createTicketDto: CreateTicketDto) {
-    return this.adminService.createTicket(createTicketDto);
-  }
-
-  @Get('tickets')
-  @ApiOperation({ summary: 'List all tickets' })
-  async getAllTickets() {
-    return this.adminService.getAllTickets();
-  }
-
-  @Get('tickets/:id')
-  @ApiOperation({ summary: 'Get ticket details by ID' })
-  async getTicket(@Param('id') id: number) {
-    return this.adminService.getTicket(id);
+  // ✅ Criar ticket (Kafka)
+  @MessagePattern('create_ticket')
+  async handleCreateTicket(dto: CreateTicketDto) {
+    const ticket = await this.appService.createTicket(dto);
+    return JSON.parse(JSON.stringify(ticket)); 
   }
 }

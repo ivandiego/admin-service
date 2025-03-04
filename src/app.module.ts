@@ -14,7 +14,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'example',
-      database: process.env.DB_NAME || 'admin_db',
+      database: process.env.DB_NAME || 'ticket_system',
       entities: [Event, Ticket],
       synchronize: true, // ⚠️ Apenas para desenvolvimento
     }),

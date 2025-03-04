@@ -30,18 +30,6 @@ export class AppService {
     return savedEvent;
   }
 
-  // **Listar todos os eventos**
-  async getAllEvents(): Promise<Event[]> {
-    return this.eventRepository.find();
-  }
-
-  // **Buscar evento por ID**
-  async getEventById(id: number): Promise<Event> {
-    const event = await this.eventRepository.findOne({ where: { id } });
-    if (!event) throw new NotFoundException(`Event with ID ${id} not found`);
-    return event;
-  }
-
   // **Criar um novo ticket**
   async createTicket(createTicketDto: CreateTicketDto): Promise<Ticket> {
     const ticket = this.ticketRepository.create(createTicketDto);
@@ -53,13 +41,25 @@ export class AppService {
     return savedTicket;
   }
 
+  // **Listar todos os eventos**
+  async getAllEvents(): Promise<Event[]> {
+    return this.eventRepository.find();
+  }
+
+  // **Buscar evento por ID**
+  async getEventById(id: string): Promise<Event> {
+    const event = await this.eventRepository.findOne({ where: { id } });
+    if (!event) throw new NotFoundException(`Event with ID ${id} not found`);
+    return event;
+  }
+
   // **Listar todos os tickets**
   async getAllTickets(): Promise<Ticket[]> {
     return this.ticketRepository.find();
   }
 
   // **Buscar ticket por ID**
-  async getTicket(id: number): Promise<Ticket> {
+  async getTicket(id: string): Promise<Ticket> {
     const ticket = await this.ticketRepository.findOne({ where: { id } });
     if (!ticket) throw new NotFoundException(`Ticket with ID ${id} not found`);
     return ticket;
