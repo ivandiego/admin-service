@@ -1,0 +1,6 @@
+build:
+  docker:
+    web: Dockerfile  # Usa o Dockerfile para buildar a aplicação
+
+run:
+  web: npm run start  # Comando para rodar a aplicação

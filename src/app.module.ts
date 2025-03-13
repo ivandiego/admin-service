@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { Event } from './entities/event.entity';
 import { Ticket } from './entities/ticket.entity';
+import { TicketOrder } from './entities/order-ticket.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -15,11 +16,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'example',
       database: process.env.DB_NAME || 'ticket_system',
-      entities: [Event, Ticket],
+      entities: [Event, Ticket, TicketOrder],
       synchronize: true, // ⚠️ Apenas para desenvolvimento
     }),
 
-    TypeOrmModule.forFeature([Event, Ticket]), // Importando os repositórios
+    TypeOrmModule.forFeature([Event, Ticket, TicketOrder]), // Importando os repositórios
 
     ClientsModule.register([
       {
